@@ -1,0 +1,596 @@
+{"rooms": [{
+      "alignedDims": "[623.88745, 342.9, 617.22]",
+      "categories": [
+        "Room"
+      ],
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false,
+      "id": "room00",
+      "isContainer": true,
+      "name": "room",
+      "solidVolume": "8.428123",
+      "staticFrictionForce": "1.0",
+      "supportSurfaceArea": "1.796034",
+      "surfaceVolume": "7.853202",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "up": "[0.0, 1.0, 0.0]",
+      "weight": "1.0",
+      "wnlemmas": [
+        "room"
+      ],
+      "wnsynset": "n4112987"
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "7.979723",
+      "isContainer": true,
+      "surfaceVolume": "6.822538",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "0.768282",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[632.14246, 342.9, 617.22]",
+      "id": "room01",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "13.168656",
+      "isContainer": true,
+      "surfaceVolume": "8.007411",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "2.421763",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[628.64996, 342.9, 621.02997]",
+      "id": "room02",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "44.513218",
+      "isContainer": true,
+      "surfaceVolume": "35.354691",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "85.653358",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[1066.7999, 419.1, 891.54]",
+      "id": "room03",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "16.586082",
+      "isContainer": true,
+      "surfaceVolume": "12.431315",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "8.639936",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[792.48, 495.3, 731.52]",
+      "id": "room04",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "24.896553",
+      "isContainer": true,
+      "surfaceVolume": "13.981465",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "2.667814",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[930.3407, 342.9, 617.22]",
+      "id": "room05",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "9.386004",
+      "isContainer": true,
+      "surfaceVolume": "5.929386",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.026468232253482098",
+      "supportSurfaceArea": "23.673212",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[491.515, 350.0, 492.3091]",
+      "id": "room06",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "12.365352",
+      "isContainer": true,
+      "surfaceVolume": "9.274014",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "1.107862",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[669.859, 342.9, 702.31]",
+      "id": "room07",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "8.630802",
+      "isContainer": true,
+      "surfaceVolume": "7.803492",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "2.097009",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[624.83997, 342.9, 617.22]",
+      "id": "room08",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "6.923719",
+      "isContainer": true,
+      "surfaceVolume": "6.76156",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "1.79199",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[624.83997, 342.9, 617.22]",
+      "id": "room09",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "4.064159",
+      "isContainer": true,
+      "surfaceVolume": "3.105651",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "16.123882",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[449.58, 276.86, 441.00748]",
+      "id": "room10",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "3.173536",
+      "isContainer": true,
+      "surfaceVolume": "2.545621",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.027352400066473964",
+      "supportSurfaceArea": "0.110132",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[390.3187, 286.262, 469.09482]",
+      "id": "room11",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },{
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "10.131584",
+      "isContainer": true,
+      "surfaceVolume": "10.638337",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.03146410652478909",
+      "supportSurfaceArea": "45.511921",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[664.6991, 286.26202, 846.50726]",
+      "id": "room12",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 0.0, 1.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "5.683289",
+      "isContainer": true,
+      "surfaceVolume": "6.782098",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.031087438185790645",
+      "supportSurfaceArea": "30.030603",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[798.33167, 307.03137, 406.04446]",
+      "id": "room13",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 0.0, 1.0]",
+      "front": "[1.0, 0.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "249.195328",
+      "isContainer": true,
+      "surfaceVolume": "44.526466",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "78.454529",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[1283.0663, 317.5, 610.26166]",
+      "id": "room14",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 0.0, 1.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "47.786911",
+      "isContainer": true,
+      "surfaceVolume": "33.666119",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "71.230827",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[1100.0004, 289.99942, 680.0012]",
+      "id": "room15",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 0.0, 1.0]",
+      "front": "[-1.0, 0.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "37.425716",
+      "isContainer": true,
+      "surfaceVolume": "23.165171",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "53.703644",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[688.33997, 434.34, 844.44586]",
+      "id": "room16",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n4112987",
+      "wnlemmas": [
+        "room"
+      ],
+      "solidVolume": "11.495542",
+      "isContainer": true,
+      "surfaceVolume": "8.504127",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.025400000000000002",
+      "supportSurfaceArea": "1.618533",
+      "staticFrictionForce": "1.0",
+      "name": "room",
+      "alignedDims": "[624.83997, 342.9, 672.1276]",
+      "id": "room17",
+      "categories": [
+        "Room"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n3124849",
+      "wnlemmas": [
+        "court",
+        "courtyard"
+      ],
+      "solidVolume": "1.0",
+      "isContainer": true,
+      "surfaceVolume": "1.0",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.018539323331016204",
+      "supportSurfaceArea": "1.0",
+      "staticFrictionForce": "1.0",
+      "name": "courtyard",
+      "alignedDims": "[3002.8516, 194.0813, 3730.2476]",
+      "id": "room19",
+      "categories": [
+        "Courtyard"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n3124849",
+      "wnlemmas": [
+        "court",
+        "courtyard"
+      ],
+      "solidVolume": "1.0",
+      "isContainer": true,
+      "surfaceVolume": "1.0",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.016420257382634425",
+      "supportSurfaceArea": "1.0",
+      "staticFrictionForce": "1.0",
+      "name": "courtyard",
+      "alignedDims": "[2962.4448, 283.80444, 2909.1797]",
+      "id": "room20",
+      "categories": [
+        "Courtyard"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n3124849",
+      "wnlemmas": [
+        "court",
+        "courtyard"
+      ],
+      "solidVolume": "1.0",
+      "isContainer": true,
+      "surfaceVolume": "1.0",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.014516821850943797",
+      "supportSurfaceArea": "1.0",
+      "staticFrictionForce": "1.0",
+      "name": "courtyard",
+      "alignedDims": "[4856.414, 300.10193, 3967.1267]",
+      "id": "room21",
+      "categories": [
+        "Courtyard"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n3124849",
+      "wnlemmas": [
+        "court",
+        "courtyard"
+      ],
+      "solidVolume": "1.0",
+      "isContainer": true,
+      "surfaceVolume": "1.0",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.01954508920934972",
+      "supportSurfaceArea": "1.0",
+      "staticFrictionForce": "1.0",
+      "name": "courtyard",
+      "alignedDims": "[3501.956, 101.86218, 3501.9482]",
+      "id": "room22",
+      "categories": [
+        "Courtyard"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n3124849",
+      "wnlemmas": [
+        "court",
+        "courtyard"
+      ],
+      "solidVolume": "1.0",
+      "isContainer": true,
+      "surfaceVolume": "1.0",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.016842037231274923",
+      "supportSurfaceArea": "1.0",
+      "staticFrictionForce": "1.0",
+      "name": "courtyard",
+      "alignedDims": "[4464.706, 1484.7417, 3458.3271]",
+      "id": "room23",
+      "categories": [
+        "Courtyard"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    },
+    {
+      "wnsynset": "n3124849",
+      "wnlemmas": [
+        "court",
+        "courtyard"
+      ],
+      "solidVolume": "1.0",
+      "isContainer": true,
+      "surfaceVolume": "1.0",
+      "weight": "1.0",
+      "tags": [
+        ""
+      ],
+      "unit": "0.016830609066447188",
+      "supportSurfaceArea": "1.0",
+      "staticFrictionForce": "1.0",
+      "name": "courtyard",
+      "alignedDims": "[2443.3835, 606.74347, 2626.4165]",
+      "id": "room24",
+      "categories": [
+        "Courtyard"
+      ],
+      "up": "[0.0, 1.0, 0.0]",
+      "front": "[0.0, 1.0, 0.0]",
+      "has_parts": false
+    }
+  ]
+}
