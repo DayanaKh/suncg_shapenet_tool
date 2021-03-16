@@ -1,76 +1,50 @@
 package importer.isospace;
 
-import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
-import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.S;
+import de.tudarmstadt.ukp.dkpro.core.api.io.JCasResourceCollectionReader_ImplBase;
 import org.apache.uima.UimaContext;
-import org.apache.uima.cas.CASException;
 import org.apache.uima.collection.CollectionException;
 import org.apache.uima.jcas.JCas;
-import org.apache.uima.jcas.cas.FSArray;
 import org.apache.uima.resource.ResourceInitializationException;
-//import org.dkpro.core.api.io.JCasResourceCollectionReader_ImplBase;
-import de.tudarmstadt.ukp.dkpro.core.api.io.JCasResourceCollectionReader_ImplBase;
 import org.dkpro.core.api.resources.CompressionUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.texttechnologylab.annotation.semaf.IsoSpatial.Vec3;
 import org.texttechnologylab.annotation.semaf.IsoSpatial.Vec4;
-import org.texttechnologylab.annotation.semaf.isobase.Entity;
-import org.texttechnologylab.annotation.semaf.isospace.*;
-import org.texttechnologylab.annotation.semaf.meta.MetaLink;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.texttechnologylab.annotation.semaf.isospace.SpatialEntity;
 import org.xml.sax.SAXException;
 
+import javax.json.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.rmi.server.ObjID;
 import java.util.*;
-import java.lang.Math;
 import java.util.concurrent.ThreadLocalRandom;
 
-;
-
-import org.json.*;
-
-import static java.lang.Float.*;
-
-/*
- * Anmerkungen:
- * 
- * Scopes fehlen
- * -> Nicht relevant fuer SpaceEval
- * 
- * Value bei Signales fehlen. SInd wohl aber auch nur wichtig bei Paths.
- * -> Und da gehen die eh unter? :... (Werden die referiert)
- * 
- * Measure Links koennen auch fuer MRelationen verwendet werden. Hier nicht ergaenzt, da nicht in den Spaceeval Daten relevant ....
- * 
- * Manner wird weiterhin als Signal behalten.
- */
+//import org.dkpro.core.api.io.JCasResourceCollectionReader_ImplBase;
 
 public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
 
-	DocumentBuilder builder;
+    DocumentBuilder builder;
 
-	
+
     @Override
     public void initialize(UimaContext aContext) throws ResourceInitializationException
     {
         super.initialize(aContext);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
-			builder = factory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
     }
-	
+
     @Override
     public void getNext(JCas aJCas)
-        throws IOException, CollectionException
+            throws IOException, CollectionException
     {
         Resource res = nextFile();
         initCas(aJCas, res);
@@ -79,16 +53,17 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
         idMap = new HashMap<>();
         try {
             //convert(aJCas, reader, false);
+
             reader = CompressionUtils.getInputStream(res.getLocation(), res.getInputStream());
-			convert(aJCas, reader, true);
+            convert(aJCas, reader, true);
 
         } catch (SAXException e) {
-			e.printStackTrace();
-		}
-        finally {
-        	reader.close();
+            e.printStackTrace();
         }
-    	//System.out.println(XmlFormatter.getPrettyString(aJCas.getCas()));
+        finally {
+            reader.close();
+        }
+        //System.out.println(XmlFormatter.getPrettyString(aJCas.getCas()));
     }
 
     //potential wall
@@ -143,6 +118,7 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
             JSONArray nodes = level.getJSONArray("nodes");
             JSONArray min = new JSONArray(3);
             JSONArray max = new JSONArray(3);
+            System.out.println(min.toString());
 
             for (int ind_nodes = 0; ind_nodes < nodes.length(); ind_nodes++)
             {
@@ -159,6 +135,8 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
                     double depth = max.getDouble(2) - min.getDouble(2);
                     double XZratio = width / depth;
 
+                    System.out.println(width+" dddd");
+
                     String objID = "room05";//later choose either at random or as per some criteria to get the most similar room
                     SpatialEntity entity = new SpatialEntity(aJCas);
                     entity.setObject_id(objID);
@@ -167,7 +145,7 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
                     double rm5scale = 0.6;
 
                     Vec3 pos = new Vec3(aJCas);
-                    pos.setX(width*100.0/2); // m to cm conversion
+                    pos.setX(width*100/2); // m to cm conversion
                     pos.setY(90);//(height*100.0/2);
                     pos.setZ(depth*100.0/2);
                     /*pos.setX(0);
@@ -268,6 +246,8 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
                     SpatialEntity entity = new SpatialEntity(aJCas);
                     entity.setObject_id(objID);
 
+                    System.out.println(min);
+
                     // 4x4 Transformation-matrix (parat in SUNCG-JSON Datei)
                     // a b c d
                     // e f g h
@@ -317,9 +297,9 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
                             sss
                         }*/
                         if(
-                            bWEST > aWEST && bEAST < aWEST && bNORTH < aNORTH && bSOUTH > aNORTH ||
-                            bWEST > aWEST && bEAST < aWEST && bNORTH < aSOUTH && bSOUTH > aSOUTH ||
-                            bWEST > aWEST && bEAST < aWEST && bNORTH > aNORTH && bSOUTH < aSOUTH
+                                bWEST > aWEST && bEAST < aWEST && bNORTH < aNORTH && bSOUTH > aNORTH ||
+                                        bWEST > aWEST && bEAST < aWEST && bNORTH < aSOUTH && bSOUTH > aSOUTH ||
+                                        bWEST > aWEST && bEAST < aWEST && bNORTH > aNORTH && bSOUTH < aSOUTH
                         ) {
                             System.out.println("OVERLAP found");
                             double diffX = Math.abs(box[0]-idealBBox[0]);
@@ -335,9 +315,9 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
                             }
                         }
                         if(
-                            bWEST > aEAST && bEAST < aEAST && bNORTH < aNORTH && bSOUTH > aNORTH ||
-                            bWEST > aEAST && bEAST < aEAST && bNORTH < aSOUTH && bSOUTH > aSOUTH ||
-                            bWEST > aEAST && bEAST < aEAST && bNORTH > aNORTH && bSOUTH < aSOUTH
+                                bWEST > aEAST && bEAST < aEAST && bNORTH < aNORTH && bSOUTH > aNORTH ||
+                                        bWEST > aEAST && bEAST < aEAST && bNORTH < aSOUTH && bSOUTH > aSOUTH ||
+                                        bWEST > aEAST && bEAST < aEAST && bNORTH > aNORTH && bSOUTH < aSOUTH
                         ) {
                             System.out.println("OVERLAP found");
                             double diffX = Math.abs(box[0]-idealBBox[0]);
@@ -364,12 +344,14 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
                     collisionBBoxes.add(idealBBox);
 
                     System.out.println(m+" "+o+" "+n);
+                    System.out.println(transform.getDouble(12)+" "+transform.getDouble(13)+" "+ transform.getDouble(14));
 
                     // scale
                     double sa = Math.sqrt(Math.pow(a,2) + Math.pow(e,2) + Math.pow(i,2));
                     double sb = Math.sqrt(Math.pow(b,2) + Math.pow(f,2) + Math.pow(j,2));
                     double sc = Math.sqrt(Math.pow(c,2) + Math.pow(g,2) + Math.pow(k,2));
-                    Vec3 scale = new Vec3(aJCas);/*
+                    Vec3 scale = new Vec3(aJCas);
+                    /*
                     scale.setX(sa);
                     scale.setY(sb);
                     scale.setZ(sc);*/
@@ -484,25 +466,38 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
                 }
             }
         }
-/*        Document jsondoc = builder.parse(aReader);
-        Element root = jsondoc.getDocumentElement();
+    }
 
-		String objID = json["id"];
+    //Dayana
+    //returns the dimensions of Shape-Net rooms
+    public static Map Rooms() throws FileNotFoundException {
+        // Creating a dictionary: key=Id, value=fine_grained_class,coarse_grained_class and nyuv2_40class
+        Map<String, double[]> map = new HashMap<>();
 
-		SpatialEntity entiy = new SpatialEntity(aJCas);
-
-		entiy.setObject_id(objID);
-
-		Vec3 pos = new Vec3(aJCas);
-		pos.setX();
-
-		entiy.setRotation(objID);
-		entiy.setScale(objID);
-		entiy.setPosition(pos);
-
-		idMap.put(id, entity);
-		entity.addToIndexes();*/
-
+        // if we make a search
+        File jsonInputFile = new File(System.getProperty("user.dir") + "/resources/spaceeval/XML/search.json");
+        InputStream is;
+        try {
+            is = new FileInputStream(jsonInputFile);
+            // Create JsonReader from Json.
+            JsonReader reader = Json.createReader(is);
+            // Get the JsonObject structure from JsonReader.
+            JsonObject empObj = reader.readObject();
+            reader.close();
+            // read json array
+            JsonArray arrObj = empObj.getJsonArray("rooms");
+            for (int i = 0; i < arrObj.size(); i++) {
+                JsonObject jsonObject1 = arrObj.getJsonObject(i);
+                String ind = jsonObject1.getString("id");
+                JsonString curr = jsonObject1.getJsonString("alignedDims");
+                String[] dims = curr.toString().replace("[", "").replace("]", "").replace("\"", "").split(",");
+                double[] dim= {Double.parseDouble(dims[0]),Double.parseDouble(dims[1]),Double.parseDouble(dims[2]) };
+                map.put(ind, dim);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 
     public String SUNCGIDtoShapeNetID(String suncgId) {
@@ -709,6 +704,42 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
 
     //Dayana
     // returns a Map with all SUNCG objects and their dimensions
+    public static Map MMSUNCG() throws FileNotFoundException {
+        // Creating a dictionary: key=Id, value=fine_grained_class,coarse_grained_class and nyuv2_40class
+        Map<String, double[][]> map = new HashMap<>();
+        //Get scanner instance
+        Scanner scanner = new Scanner(new File(System.getProperty("user.dir") + "/resources/spaceeval/XML/res.csv"));
+        //Set the delimiter to split objects
+        scanner.useDelimiter("\n");
+        while (scanner.hasNext()) {
+            String data = scanner.next();
+            //for each object split arguments-string into an array using comma
+            //ignore the commas within quotes
+            String[] elem = data.split(",");
+
+            //add words in the dictionary
+            String[] up = elem[9].replace("\"", "").replace("\\", "").split("/");
+            String[] front = elem[10].replace("\"", "").replace("\\", "").split("/");
+
+
+            double[][] dims = {null, null};
+
+            if (!elem[9].equals("up") & !elem[9].equals("")) {
+                dims[0] = new double[]{Double.parseDouble(up[0]), Double.parseDouble(up[1]), Double.parseDouble(up[2])};
+            }
+            if (!elem[10].equals("front") & !elem[10].equals("")) {
+                dims[1] = new double[]{Double.parseDouble(front[0]), Double.parseDouble(front[1]), Double.parseDouble(front[2])};
+                }
+            if (!(dims[0] == null & dims[1] == null)) {
+                map.put(elem[1], dims);
+            }
+        }
+        //Do not forget to close the scanner
+        scanner.close();
+        return map;
+    }
+
+    //Dayana
     public static Map DimsSUNCG() throws FileNotFoundException {
         // Creating a dictionary: key=Id, value=fine_grained_class,coarse_grained_class and nyuv2_40class
         Map<String, List<Float>> map = new HashMap<>();
@@ -746,7 +777,7 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
     // returns a Map with all ShapeNet ids each coupled with a List of
     // String arrays of possible keywords each array of different priority,
     // so as to aid finding their ShapeNet equivalent
-    private static Map IdShapeNet() throws FileNotFoundException {
+    public static Map IdShapeNet() throws FileNotFoundException {
         // Creating a dictionary: key=Id, value=wnlemmas
         Map<String, List<List<String>>> map = new HashMap<>();
 
@@ -763,10 +794,10 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
             String[] res = new String[4];
 
             if (elem[1].replace("\"", "").length() != 0) {
-                res[0] = elem[1];
+                res[0] = elem[3];
             }
             if (elem[3].replace("\"", "").length() != 0) {
-                res[1] = elem[3];
+                res[1] = elem[1];
             }
             if (elem[14].replace("\"", "").length() != 0) {
                 res[2] = elem[14];
@@ -802,7 +833,7 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
 
     //Dayana
     // returns a Map with all ShapeNet objects and their dimensions
-    private static Map DimsShapeNet() throws FileNotFoundException {
+    public static Map DimsShapeNet() throws FileNotFoundException {
         // Creating a dictionary: key=Id, value=wnlemmas
         Map<String, List<Float>> map = new HashMap<>();
 
@@ -827,6 +858,44 @@ public class RommJsonImporter extends JCasResourceCollectionReader_ImplBase {
                 }
                 map.put(elem[0],dims);
             }
+        }
+        //Do not forget to close the scanner
+        scanner.close();
+        return map;
+    }
+
+    //Dayana
+    // returns a Map with all ShapeNet objects and their dimensions
+    public static Map MMShapeNet() throws FileNotFoundException {
+        // Creating a dictionary: key=Id, value=wnlemmas
+        Map<String, double[][]> map = new HashMap<>();
+
+        //Get scanner instance
+        Scanner scanner = new Scanner(new File(System.getProperty("user.dir") + "/resources/spaceeval/XML/metadata_filter.csv"));
+        //Set the delimiter to split objects
+        scanner.useDelimiter("wss.");
+        while (scanner.hasNext()) {
+            String data = scanner.next();
+            //for each object split arguments-string into an array using comma
+            //ignore the commas within quotes
+            String[] elem = data.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+            //add words in the dictionary
+            //add words in the dictionary
+            String[] up = elem[4].replace("\"", "").replace("\\", "").split(",");
+            String[] front = elem[5].replace("\"", "").replace("\\", "").split(",");
+
+            double[][] dims = {null, null};
+
+            if (!elem[4].equals("up") & !elem[4].equals("")) {
+                dims[0] = new double[]{Double.parseDouble(up[0]), Double.parseDouble(up[1]), Double.parseDouble(up[2])};
+            }
+            if (!elem[5].equals("front") & !elem[5].equals("")) {
+                dims[1] = new double[]{Double.parseDouble(front[0]), Double.parseDouble(front[1]), Double.parseDouble(front[2])};
+            }
+            if (!(dims[0] == null & dims[1] == null)) {
+                map.put(elem[0], dims);
+            }
+
         }
         //Do not forget to close the scanner
         scanner.close();

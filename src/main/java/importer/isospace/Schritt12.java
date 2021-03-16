@@ -27,12 +27,8 @@ public class Schritt12 {
 
 		String myFolder = "final_results_synth_bedroom";
 		File inputfolder = getFileFromURL("spaceeval/json/"+myFolder);
-		//File inputfolder = getFileFromURL("spaceeval/Training/CP");
-		//File inputfolder = getFileFromURL("spaceeval/Training/RFC");
-		//File inputfolder = getFileFromURL("spaceeval/spaceeval_trial_data");
 		boolean write = true;
-		String outputfolder = "C:/Users/Jan/text2scene/javastuff/anderes/resources/spaceeval/json/xmlResults/"+myFolder+'/';
-
+		String outputfolder = "C:/Users/Dayana Khadush/VAnnotatoRv2-master/Assets/Text2Scene/Scenes/SceneVisualizer/";
 		File directory = new File(String.valueOf(outputfolder));
 		if(!directory.exists()){
 			directory.mkdir();
@@ -63,6 +59,7 @@ public class Schritt12 {
 	}
 
 	private static File getFileFromURL(String path) {
+
 		URL url = Schritt12.class.getClassLoader().getResource(path);
 		File file = null;
 		try {
