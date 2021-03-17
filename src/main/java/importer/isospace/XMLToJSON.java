@@ -27,16 +27,17 @@ public class XMLToJSON {
 
     public static Map<String, List<List<String>>> idMap_SUNCG = null;
     public static Map<String, List<List<String>>> idMap_ShapeNet = null;
-    public static Map<String, List<Float>> dimsMap_ShapeNet = null;
-    public static Map<String, List<Float>> dimsMap_SUNCG = null;
+    public static Map<String, double[]> dimsMap_ShapeNet = null;
+    public static Map<String, double[]> dimsMap_SUNCG = null;
     public static Map<String, double[][]> mmMap_SUNCG = null;
     public static Map<String, double[][]> mmMap_ShapeNet= null;
     public static Map<String, double[]> roomsShapeNet= null;
 
 
-    //room params (here it is  room05 in ShapeNet and room with index 9 from SUNCG)
-    public static double[] mins= {15.524999652989209, 0, 17.05526329066015};
-    public static double[] maxs= {18.94473590467715, 2.739999938756229, 22.799999490380287};
+    //room params (here it is  room05 in ShapeNet and room with index 80 from SUNCG)
+    //ATTENTION: room dims are given for standard up and front
+    public static double[] mins= { 36.83515466266676, 0, 40.72485748816598};
+    public static double[] maxs= {42.481718864233464, 2.739999938756228, 44.52473533291959};
 
     public static void main(String[] args) throws UIMAException, CASRuntimeException, IOException, SAXException, ParserConfigurationException {
         String inputfolder = "/resources/spaceeval/xml/ACL21_Example.xml";
@@ -46,16 +47,8 @@ public class XMLToJSON {
         if (!directory.exists()) {
             directory.mkdir();
         }
-        double[] a={0.0, 0.0,1.0};
-        double[] b={0.7071067690849304,-0.7071067690849304,0.0};
-
-        double[][] matrix= rot_fromto(a,b );
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                System.out.print(matrix[i][j] + " ");
-            }
-            System.out.println();
-        }
+        double[] up={0.0, 1.0, 0.0};
+        double[] front={0.0, 0.0, 1.0};
 
         // 1.Initialisierung des JSON files und JSONObject
 
@@ -86,11 +79,12 @@ public class XMLToJSON {
         roomsShapeNet =RommJsonImporter.Rooms();
         json.put("front", Arrays.asList(0, 0, 1 ));
         json.put("scaleToMeters", 1);
+        json.put("scaleToMeters", 1);
         json.put("up", Arrays.asList(0, 1, 0));
 
 
         //different Scenes. We take 7836 in Example.xml
-        String room = "7894";
+        String room = "7894";//"7894" or "7887"
         double[] roomGeom ={0.0, 0.0, 0.0};
 
         // Extract IDs for object, position, rotations und scale
@@ -147,51 +141,108 @@ public class XMLToJSON {
             if (nNode.getNodeType() == Node.ELEMENT_NODE ) {
                 Element eElement = (Element) nNode;
                 String ID = eElement.getAttribute("object_id");
-
-
                 if (idMap_ShapeNet.containsKey(ID) & eElement.getAttribute("sofa").equals(room)) {
+                    System.out.println("\n________________________");
                     System.out.println("Current object ID = " + ID);
                     String scale = eElement.getAttribute("scale");
                     String position = eElement.getAttribute("position");
                     String rotation = eElement.getAttribute("rotation");
                     //String axisrotation
-
                     // Extract x, y, z und w values for position, rotations and scale values from XML
-
                     double[] scales = getScale(scale, root);
                     double[] rotations = getRotation(rotation, root);
                     double[] positions = getPosition(position, root);
-
-                    String objID = ShapeNetIDtoSUNCGID(ID);
-
                     double x = positions[0] - roomGeom[0] + mins[0];
                     double z = positions[2] - roomGeom[2] + mins[2];
+                    System.out.println("\n Quaternion: x = " + rotations[0] + " y = " + rotations[1] + " z = " +rotations[2] + " w = " + rotations[3] );
+                    double[][] upfr = mmMap_ShapeNet.get(ID);
+                    System.out.println("\nUp matrix");
+                    for (int i = 0; i < upfr.length; i++){
+                        for (int j = 0; j < upfr[i].length; j++) {
+                            System.out.print(upfr[i][j] + " ");
+                        }
+                        System.out.println("");
+                    }
+                    if(upfr!=null){
+                        double[][] ups = rot_fromto(upfr[0], up);
 
-                    /*
+
+
+                        double[] front2=multiplyVecMatrix(front, ups);
+                        double[] negfront={-front2[0], -front2[1], -front2[2]};
+                        double[][] fronts = rot_fromto(upfr[1], negfront);
+
+                        System.out.println("\nFront matrix");
+                        for (int i = 0; i < fronts.length; i++){
+                            for (int j = 0; j < fronts[i].length; j++) {
+                                System.out.print(fronts[i][j] + " ");
+                            }
+                            System.out.println("");
+                        }
+
+                        upfr = multiplyMatrices(ups,fronts);
+                        System.out.println("\nUp-front matrix");
+                        for (int i = 0; i < upfr.length; i++){
+                            for (int j = 0; j < upfr[i].length; j++) {
+                                System.out.print(upfr[i][j] + " ");
+                            }
+                            System.out.println("");
+                        }
+                    }
+                    System.out.println("\nEuler");
                     double[] euler= QuaternionToEuler(rotations);
                     for (int j = 0; j < euler.length; j++) {
-                        System.out.print(euler[j] + " \n");
+                        System.out.print(euler[j] + " ");
                     }
-                     */
+                    System.out.println("\n");
 
-                    double[][] rotationsMatrix = QuaternionToMatrix(rotations, objID); // quaternion -> Euler (roll, pitch, yaw) -> return as ZYX Euler Angle
-                    double[][] transformationMatrix = getTransformationMatrix(rotationsMatrix, x, z);
-
-                    for (int i = 0; i < transformationMatrix.length; i++) {
-                        for (int j = 0; j < transformationMatrix[i].length; j++) {
-                            System.out.print(transformationMatrix[i][j] + " ");
+                    String objID = ShapeNetIDtoSUNCGID(ID, scales);
+                    if(objID!=null){
+                        double[] currsize=dimsMap_SUNCG.get(objID);
+                        System.out.println("Take the SUNCG object with ID: " + objID +" and size " + currsize[0] + " "+ currsize[1] + " "+ currsize[2]);
+                        double[][] rotationsMatrix = QuaternionToMatrix(rotations, objID); // quaternion -> Euler (roll, pitch, yaw) -> return as ZYX Euler Angle
+                        for (int i = 0; i < rotationsMatrix.length; i++){
+                            for (int j = 0; j < rotationsMatrix[i].length; j++) {
+                                System.out.print(rotationsMatrix[i][j] + " ");
+                            }
+                            System.out.println("");
                         }
-                        System.out.println();
-                    }
+                        System.out.println("\n");
+                        rotationsMatrix = multiplyMatrices(rotationsMatrix, upfr);
+                        for (int i = 0; i < rotationsMatrix.length; i++){
+                            for (int j = 0; j < rotationsMatrix[i].length; j++) {
+                                System.out.print(rotationsMatrix[i][j] + " ");
+                            }
+                            System.out.println("");
+                        }
+                        double[][] transformationMatrix = getTransformationMatrix(rotationsMatrix, x, z);
 
-                    JSONObject internalObject = new JSONObject();
-                    JSONObject object;
+                        JSONObject internalObject = new JSONObject();
+                        JSONObject object;
 
-                    if (transformationMatrix != null && objID != null) {
-                        System.out.println("Create a JSON node ...");
-                        object = createJSONArray(internalObject, transformationMatrix, objID, count);
-                        count++;
-                        objects.put(object); // these are stored in item
+                        if (transformationMatrix != null ) {
+
+                            System.out.println("\nRotation matrix");
+                            for (int i = 0; i < transformationMatrix.length; i++) {
+                                for (int j = 0; j < transformationMatrix[i].length; j++) {
+                                    System.out.print(transformationMatrix[i][j] + " ");
+                                }
+                                System.out.println("");
+                            }
+
+                            System.out.println("\nAdjusted matrix");
+                            double[][] result= multiplyMatrices(transformationMatrix, upfr);
+                            for (int i = 0; i < result.length; i++){
+                                for (int j = 0; j < result[i].length; j++) {
+                                    System.out.print(result[i][j] + " ");
+                                }
+                                System.out.println("");
+                            }
+                            System.out.println("Create a JSON node ...");
+                            object = createJSONArray(internalObject, transformationMatrix, objID, count);
+                            count++;
+                            objects.put(object); // these are stored in item
+                        }
                     }
                 }
                 else{
@@ -241,14 +292,15 @@ public class XMLToJSON {
         fileJSON.flush();
     }
 
-    public static String ShapeNetIDtoSUNCGID(String shapeNetId) {
-        List<Float> dims = dimsMap_ShapeNet.get(shapeNetId);
-        System.out.println("looking up names for suncgID " + shapeNetId + " and with sizes approx. " + dims);
+    public static String ShapeNetIDtoSUNCGID(String shapeNetId, double[] scale) {
+        double[] size = dimsMap_ShapeNet.get(shapeNetId);
+        System.out.println(size[0]);
+        double[] dims = {size[0]*scale[0],size[1]*scale[1], size[2]*scale[2]};
+        System.out.println("looking up names for suncgID " + shapeNetId + " and with sizes approx. " + dims[0]+" "+ dims[2]);
 
         List<List<String>> descriptionRanks = idMap_ShapeNet.get(shapeNetId);
         // { {}, {}, {}, {} }
-        System.out.println("got description " + descriptionRanks);
-
+        System.out.println("got description " + descriptionRanks.get(2));
         List<Set> matches = new ArrayList<>();
         for (int i=0; i<3; i++) {
             Set<String> match = new HashSet<>();
@@ -286,8 +338,8 @@ public class XMLToJSON {
 
             while(current_matches.isEmpty()){
                 for(Object m: matches.get(0)){
-                    List<Float> dim = dimsMap_SUNCG.get(m.toString());
-                    if(Math.abs(dims.get(0)-dim.get(0))<r&Math.abs(dims.get(2)-dim.get(2))<r){
+                    double[] dim = dimsMap_SUNCG.get(m.toString());
+                    if(Math.abs(dims[0]-dim[0])<r&Math.abs(dims[2]-dim[2])<r){
                         current_matches.add(m.toString());
                     }
                 }
@@ -307,8 +359,8 @@ public class XMLToJSON {
             Set<String> current_matches = new HashSet<>();
             while(current_matches.isEmpty()){
                 for(Object m: matches.get(1)){
-                    List<Float> dim = dimsMap_SUNCG.get(m.toString());
-                    if(Math.abs(dims.get(0)-dim.get(0))<r&Math.abs(dims.get(2)-dim.get(2))<r){
+                    double[] dim = dimsMap_SUNCG.get(m.toString());
+                    if(Math.abs(dims[0]-dim[0])<r&Math.abs(dims[0]-dim[0])<r){
                         current_matches.add(m.toString());
                     }
                 }
@@ -350,8 +402,8 @@ public class XMLToJSON {
             Set<String> current_matches = new HashSet<>();
             while(current_matches.isEmpty()){
                 for(Object m: matches.get(2)){
-                    List<Float> dim = dimsMap_SUNCG.get(m.toString());
-                    if(Math.abs(dims.get(0)-dim.get(0))<r&Math.abs(dims.get(2)-dim.get(2))<r){
+                    double[] dim = dimsMap_SUNCG.get(m.toString());
+                    if(Math.abs(dims[0]-dim[0])<r&Math.abs(dims[2]-dim[2])<r){
                         current_matches.add(m.toString());
                     }
                 }
@@ -366,7 +418,7 @@ public class XMLToJSON {
             return finalRes.get(ind);
         }
         System.out.println("NOT FOUND");
-        return "00000";
+        return null;
     }
 
     private static double[][] QuaternionToMatrix(double[] rotations, String id) {
@@ -387,7 +439,7 @@ public class XMLToJSON {
             double zz = z * z;
             double zw = z * w;
 
-            double rotMatrix[][] = new double[4][4];
+            double rotMatrix[][] = new double[3][3];
             rotMatrix[0][0] = 1 - 2 * (yy + zz);
             rotMatrix[0][1] = 2 * (xy - zw);
             rotMatrix[0][2] = 2 * (xz + yw);
@@ -399,7 +451,7 @@ public class XMLToJSON {
             rotMatrix[2][0] = 2 * (xz - yw);
             rotMatrix[2][1] = 2 * (yz + xw);
             rotMatrix[2][2] = 1 - 2 * (xx + yy);
-
+            /*
             rotMatrix[0][3] = 0;
             rotMatrix[1][3] = 0;
             rotMatrix[2][3] = 0;
@@ -408,6 +460,8 @@ public class XMLToJSON {
             rotMatrix[3][2] = 0;
             rotMatrix[3][3] = 1;
 
+             */
+
             return rotMatrix;
         }
         return null;
@@ -415,49 +469,17 @@ public class XMLToJSON {
 
 
     private static double[] QuaternionToEuler(double[] rotations) {
-        System.out.println("ZXY");
         if (rotations.length == 4) {
             double x = rotations[0];
             double y = rotations[1];
             double z = rotations[2];
             double w = rotations[3];
-
             double r11 = 2 * (x * z + w * y);
             double r12 = w * w - x * x - y * y + z * z;
             double r21 = -2 * (y * z - w * x);
             double r31 = 2 * (x * y + w * z);
             double r32 = w * w - x * x + y * y - z * z;
-
-            double t0 = 2.0 * (w * x + y * z);
-            double t1 = 1.0 - 2.0 * (x * x + y * y);
-            double roll_X = Math.atan2(t0, t1);
-
-            double t2 = 2.0 * (w * y - z * x);
-
-            if (t2 > 1.0) {
-                t2 = 1;
-            }
-
-            if (t2 < -1.0) {
-                t2 = -1.0;
-            }
-
-            double pitch_Y = Math.asin(t2);
-
-            double t3 = 2.0 * (w * z + x * y);
-            double t4 = 1.0 - 2.0 * (y * y + z * z);
-            double yaw_Z = Math.atan2(t3, t4);
-
-            double[] euler = new double[3];
-            euler[0] = Math.toDegrees(roll_X);
-            ;
-            euler[1] = Math.toDegrees(pitch_Y);
-            euler[2] = Math.toDegrees(yaw_Z);
-
-            //return euler;
-            //Euler Angles ZYX Order
             double[] curr = {Math.toDegrees(Math.atan2(r31, r32)), Math.toDegrees(Math.asin(r21)), Math.toDegrees(Math.atan2(r11, r12))};
-
             return curr;
         }
         return null;
@@ -597,6 +619,12 @@ public class XMLToJSON {
     }
 
     public static double[][] multiplyMatrices(double[][] firstMatrix, double[][] secondMatrix) {
+        if(firstMatrix==null){
+            return secondMatrix;
+        }
+        else if(secondMatrix==null){
+            return firstMatrix;
+        }
         double[][] result = new double[firstMatrix.length][secondMatrix[0].length];
 
         for (int row = 0; row < result.length; row++) {
@@ -607,12 +635,29 @@ public class XMLToJSON {
 
         return result;
     }
+
+    public static  double[] matrixtoEuler(){
+
+        return null;
+    }
     public static double multiplyMatricesCell(double[][] firstMatrix, double[][] secondMatrix, int row, int col) {
         double cell = 0;
         for (int i = 0; i < secondMatrix.length; i++) {
             cell += firstMatrix[row][i] * secondMatrix[i][col];
         }
         return cell;
+    }
+    public static double[] multiplyVecMatrix(double[] vec, double[][] Matrix) {
+        double[] result = new double[Matrix.length];
+
+        for (int row = 0; row < result.length; row++) {
+            double cell = 0;
+            for (int i = 0; i < result.length; i++) {
+                cell += vec[i] * Matrix[i][row];
+            }
+            result[row]=cell;
+        }
+        return result;
     }
 
     private static double[][] getTransformationMatrix(double[][] rotationsMatrix, double x,double z) {
@@ -634,11 +679,13 @@ public class XMLToJSON {
             return null;
         }
     }
+
     private static double[] sum(double[] a, double[] b) {
         double result[] = new double[a.length];
         Arrays.setAll(result, i -> a[i] + b[i]);
         return result;
     }
+
     private static double[] sub(double[] a, double[] b) {
         double result[] = new double[a.length];
         Arrays.setAll(result, i -> a[i] - b[i]);
@@ -652,12 +699,30 @@ public class XMLToJSON {
 
     //rotations matrix from vector1 to vector2
     public static double[][] rot_fromto(double[] vector1, double[] vector2){
-        double[] cross1=cross(vector1, vector2);
-        double[] crossA=cross(cross1, vector1);
-        double[] crossB=cross(cross1, vector2);
-        double[][] A={vector1, cross1, crossA};
-        double[][] B={{vector2[0], cross1[0], crossB[0]}, {vector2[1], cross1[1], crossB[1]}, {vector2[2], cross1[2], crossB[2]}};
-        return multiplyMatrices(B, A);
+        if(vector1[0]==vector2[0] & vector1[1]==vector2[1] & vector1[2]==vector2[2]){
+            double[][] id={{1.0,0.0,0.0}, {0.0,1.0,0.0}, {0.0,0.0,1.0}};
+            return id;
+        }
+        else if(vector1[0]==0.0 & vector1[1]==0.0 & vector1[2]==-vector2[2]) {
+                double[][] id = {{1.0, 0.0, 0.0}, {0.0, -1.0, 0.0}, {0.0, 0.0, -1.0}};
+                return id;
+            }
+        else if(vector1[1]==0.0 & vector1[2]==0.0 & vector1[0]==-vector2[0]) {
+                double[][] id = {{1.0, 0.0, 0.0}, {0.0, -1.0, 0.0}, {0.0, 0.0, -1.0}};
+                return id;
+            }
+        else if(vector1[0]==0.0 & vector1[2]==0.0 & vector1[1]==-vector2[1]) {
+                double[][] id = {{-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, -1.0}};
+                return id;
+            }
+        else{
+            double[] cross1=cross(vector1, vector2);
+            double[] crossA=cross(cross1, vector1);
+            double[] crossB=cross(cross1, vector2);
+            double[][] A={vector1, cross1, crossA};
+            double[][] B={{vector2[0], cross1[0], crossB[0]}, {vector2[1], cross1[1], crossB[1]}, {vector2[2], cross1[2], crossB[2]}};
+            return multiplyMatrices(B, A);
+        }
     }
 
     //rotations matrix depending only on front and up vectors
